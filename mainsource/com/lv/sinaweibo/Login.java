@@ -13,13 +13,18 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 
 public class Login extends Activity {
 
-	final int MESSAGE_LOGIN = 1;
+	private String TAG = "Login";
+	final int MESSAGE_LOGIN_START = 1;
+	final int MESSAGE_LOGIN_END = 2;
 	private EditText et_username=null;
 	private EditText et_password=null;
+	private ProgressBar progress=null;
 	private Button bt_login=null;
+	private boolean isLogining = false;
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -27,6 +32,7 @@ public class Login extends Activity {
 		et_username = (EditText)findViewById(R.id.editTextUserName);
 		et_password = (EditText)findViewById(R.id.editTextPassWord);
 		bt_login = (Button)findViewById(R.id.buttonLogin);
+		progress = (ProgressBar)findViewById(R.id.progressBar1);
 		if(bt_login != null){
 			bt_login.setOnClickListener(new OnClickListener() {
 				
@@ -39,7 +45,8 @@ public class Login extends Activity {
 	}
 	
 	private void buttonListener(){
-		ui_handler.sendMessage(ui_handler.obtainMessage(MESSAGE_LOGIN));
+		ui_handler.sendMessage(ui_handler.obtainMessage(MESSAGE_LOGIN_START));
+		Log.e(TAG, "buttonListener,out");
 	}
 
 	class LoginHandler extends Handler {
@@ -47,10 +54,27 @@ public class Login extends Activity {
 		@Override
 		public synchronized void handleMessage(Message msg) {
 			switch (msg.what) {
-			case MESSAGE_LOGIN:
-				login();
+			case MESSAGE_LOGIN_START:
+				isLogining = true;
+				progress.setVisibility(ProgressBar.VISIBLE);
+				bt_login.setEnabled(false);
+				Thread thread = new Thread(){
+
+					@Override
+					public void run() {
+						login();
+						Log.e(TAG, "run,out");
+					}
+				};
+				thread.start();
 				break;
 
+			case MESSAGE_LOGIN_END:
+				isLogining = false;
+				progress.setVisibility(ProgressBar.GONE);
+				bt_login.setEnabled(true);
+				break;
+				
 			default:
 				break;
 			}
@@ -68,9 +92,15 @@ public class Login extends Activity {
 //			String args[] = {"e0bcd11246be4e83b7e186958fd3551b", "fdd481f26139ddef57909a826a60695d"};
 			String args[] = {et_username.getText().toString(), et_password.getText().toString()};
 			User user = getWeibo(false,args).verifyCredentials();
+			if(user.isVerified()){
+				Log.e(TAG, "verified");
+			}else{
+			}
 			System.out.println(user.toString());
 		} catch (WeiboException e) {
 			e.printStackTrace();
+			Log.e(TAG, "MESSAGE_LOGIN_END");
+			ui_handler.sendMessage(ui_handler.obtainMessage(MESSAGE_LOGIN_END));
 		}
 
 	}
