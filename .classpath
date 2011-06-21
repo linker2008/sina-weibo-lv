@@ -3,9 +3,10 @@
 	<classpathentry kind="src" path="examples"/>
 	<classpathentry kind="src" path="gen"/>
 	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="src" path="mainsource"/>
 	<classpathentry kind="con" path="com.android.ide.eclipse.adt.ANDROID_FRAMEWORK"/>
-	<classpathentry kind="lib" path="E:/Code/sina-weibo4android/weibo4android/lib/commons-codec.jar"/>
-	<classpathentry kind="lib" path="E:/Code/sina-weibo4android/weibo4android/lib/commons-httpclient-3.1.jar"/>
-	<classpathentry kind="lib" path="E:/Code/sina-weibo4android/weibo4android/lib/commons-logging-1.1.jar"/>
+	<classpathentry kind="lib" path="/home/linker/workspace/sina-weibo-lv/lib/commons-codec.jar"/>
+	<classpathentry kind="lib" path="/home/linker/workspace/sina-weibo-lv/lib/commons-httpclient-3.1.jar"/>
+	<classpathentry kind="lib" path="/home/linker/workspace/sina-weibo-lv/lib/commons-logging-1.1.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
